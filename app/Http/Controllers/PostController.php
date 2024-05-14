@@ -12,13 +12,13 @@ class PostController extends Controller
 
     public function index()
     {
-        return Post::latest()->get();
+        return Post::with('user:id,name')->latest()->get();
     }
 
     public function store(StorePostRequest $request)
     {
         return Post::create([
-            'user_id' => 1,
+            'user_id' => auth()->id(),
             'title' => $request->title,
             'body' => $request->body
         ]); 
@@ -26,7 +26,7 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
-        return $post;
+        return $post->load('user:id,name');
     }
 
     public function update(UpdatePostRequest $request, Post $post)
